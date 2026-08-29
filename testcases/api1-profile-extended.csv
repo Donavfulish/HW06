@@ -1,0 +1,7 @@
+TC_ID,Type,Scenario,Method,URL,Headers,Body,Expected_Status,Expected_Body_Assert,Audit_Label,Audit_Reason
+API1-E-01,security,EXTEND BUG-A2 role=admin expect 403,PUT,/api/users/me,Bearer valid,"{""name"":""Escalate"",""phone"":""912345678"",""role"":""admin""}",403,error,EXTEND,AI knows SEC-06 abstractly but misses server.js allows role update
+API1-E-02,domain,EXTEND BUG-A1 phone 0912345678 expect 200,PUT,/api/users/me,Bearer valid,"{""phone"":""0912345678""}",200,message=Profile updated,EXTEND,AI uses frontend regex as expected; VN phones start with 0
+API1-E-03,domain,EXTEND BUG-A3 name empty expect 400,PUT,/api/users/me,Bearer valid,"{""name"":""""}",400,error,EXTEND,AI assumes HTML required = backend validation
+API1-E-04,security,EXTEND missing Authorization header,PUT,/api/users/me,none,"{""name"":""NoAuth""}",401,error=Unauthorized,EXTEND,Auth negative path often omitted in happy-path-heavy AI output
+API1-E-05,security,EXTEND SQLi name no crash sanitized,PUT,/api/users/me,Bearer valid,"{""name"":""1 OR 1=1; DROP TABLE users;""}",200,message=Profile updated,EXTEND,AI lists SQLi but rarely asserts server stability post-injection
+API1-E-06,security,EXTEND role=superadmin invalid enum,PUT,/api/users/me,Bearer valid,"{""role"":""superadmin""}",403,error,EXTEND,AI tests admin escalation but not invalid role values

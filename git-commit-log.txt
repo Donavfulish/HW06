@@ -1,0 +1,17 @@
+chore: init HW06 scaffold, Postman env, X-Student-Id script
+feat(api1): generate profile test cases
+audit(api1): review profile TC against HW02 FR-04 partitions
+feat(api1): extend SEC-06 role escalation and phone boundary tests
+test(api1): Postman collection and Newman HTML report
+feat(api2): generate order state transition test cases
+audit(api2): review against HW02 FR-10 state machine
+feat(api2): extend invalid transition canceled-to-delivered tests
+test(api2): Newman run order state collection
+feat(api3): generate admin orders list test cases
+audit(api3): review against HW02 FR-18 admin partitions
+feat(api3): extend SEC-03 user token access tests
+test(api3): Newman run admin orders collection
+ci: add Newman GitHub Actions workflow
+docs: main report, AI audit, critique and bug reports
+feat: api-test-generator skill, diagram and pseudocode
+chore: finalize README and git commit log

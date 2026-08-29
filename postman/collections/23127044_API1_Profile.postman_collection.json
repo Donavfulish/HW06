@@ -1,0 +1,149 @@
+{
+  "info": {
+    "name": "23127044_API1_Profile",
+    "description": "FR-04 PUT /api/users/me — HW06 MSSV 23127044",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.add({ key: 'X-Student-Id', value: '23127044' });"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Setup",
+      "item": [
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const baseUrl = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+                  "pm.sendRequest({",
+                  "  url: baseUrl + '/api/login',",
+                  "  method: 'POST',",
+                  "  header: { 'Content-Type': 'application/json', 'X-Student-Id': '23127044' },",
+                  "  body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('userEmail'), password: pm.environment.get('userPassword') }) }",
+                  "}, (err, res) => {",
+                  "  pm.test('Login status 200', () => pm.expect(res.code).to.eql(200));",
+                  "  const json = res.json();",
+                  "  pm.environment.set('userToken', json.token);",
+                  "  pm.collectionVariables.set('userToken', json.token);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{userEmail}}\",\"password\":\"{{userPassword}}\"}"
+            },
+            "url": "{{baseUrl}}/api/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tests",
+      "item": [
+        {
+          "name": "Update Profile (data-driven)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const mode = pm.iterationData.get('auth_mode');",
+                  "const baseUrl = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+                  "let bodyRaw = pm.iterationData.get('body');",
+                  "if (bodyRaw && bodyRaw.includes('LONG600')) bodyRaw = JSON.stringify({ shipping_address: 'A'.repeat(600) });",
+                  "if (bodyRaw && bodyRaw.includes('LONG1000')) bodyRaw = JSON.stringify({ name: 'X'.repeat(1000) });",
+                  "pm.request.body = { mode: 'raw', raw: bodyRaw || '{}' };",
+                  "function applyAuth(token) {",
+                  "  pm.request.headers.remove('Authorization');",
+                  "  if (mode === 'valid') pm.request.headers.add({ key: 'Authorization', value: 'Bearer ' + token });",
+                  "  else if (mode === 'malformed') pm.request.headers.add({ key: 'Authorization', value: 'NotBearer xyz' });",
+                  "  else if (mode === 'tampered') pm.request.headers.add({ key: 'Authorization', value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.INVALID.sig' });",
+                  "  else if (mode === 'empty') pm.request.headers.add({ key: 'Authorization', value: 'Bearer ' });",
+                  "  else if (mode === 'basic') pm.request.headers.add({ key: 'Authorization', value: 'Basic dXNlcjpwYXNz' });",
+                  "}",
+                  "if (mode === 'valid') {",
+                  "  let token = pm.environment.get('userToken');",
+                  "  if (token) { applyAuth(token); }",
+                  "  else {",
+                  "    pm.sendRequest({ url: baseUrl + '/api/login', method: 'POST',",
+                  "      header: { 'Content-Type': 'application/json', 'X-Student-Id': '23127044' },",
+                  "      body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('userEmail'), password: pm.environment.get('userPassword') }) }",
+                  "    }, (e, r) => { token = r.json().token; pm.environment.set('userToken', token); applyAuth(token); });",
+                  "  }",
+                  "} else { applyAuth(''); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const expected = parseInt(pm.iterationData.get('expected_status'), 10);",
+                  "const assertType = pm.iterationData.get('expected_assert');",
+                  "pm.test('[' + pm.iterationData.get('tc_id') + '] status ' + expected, () => pm.response.to.have.status(expected));",
+                  "if (assertType.includes('message=Profile updated')) {",
+                  "  pm.test('has message Profile updated', () => pm.expect(pm.response.json().message).to.eql('Profile updated'));",
+                  "}",
+                  "if (assertType.includes('error=Unauthorized')) {",
+                  "  pm.test('error Unauthorized', () => pm.expect(pm.response.json().error).to.eql('Unauthorized'));",
+                  "}",
+                  "if (assertType.includes('error=Forbidden')) {",
+                  "  pm.test('error Forbidden', () => pm.expect(pm.response.json().error).to.eql('Forbidden'));",
+                  "}",
+                  "if (assertType.includes('content-type=json')) {",
+                  "  pm.test('Content-Type json', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('json'));",
+                  "}",
+                  "if (assertType.includes('schema:message')) {",
+                  "  pm.test('schema message key', () => pm.expect(pm.response.json()).to.have.property('message'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{body}}"
+            },
+            "url": "{{baseUrl}}/api/users/me"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ]
+}

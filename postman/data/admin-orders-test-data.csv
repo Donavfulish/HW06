@@ -1,0 +1,45 @@
+tc_id,auth_mode,expected_status,expected_assert,extra,scenario
+API3-G-01,admin,200,schema_array,,Admin token returns 200 array
+API3-G-02,user,200,schema_array,,User token SEC-03 should 403
+API3-G-03,none,401,error=Unauthorized,,No token returns 401
+API3-G-04,malformed,403,error=Forbidden,,Malformed JWT returns 403
+API3-G-05,tampered,403,error=Forbidden,,Tampered JWT returns 403
+API3-G-06,empty,401,error=Unauthorized,,Empty Bearer returns 401
+API3-G-07,admin,200,schema_id,,Each order has id field
+API3-G-08,admin,200,schema_status,,Each order has status field
+API3-G-09,admin,200,schema_total,,Each order has total_amount field
+API3-G-10,admin,200,schema_address,,Each order has shipping_address field
+API3-G-11,admin,200,schema_user_id,,Each order has user_id field
+API3-G-12,admin,200,schema_created,,Each order has created_at field
+API3-G-13,admin,200,schema_array,,Response is JSON array type
+API3-G-14,admin,200,content-type=json,,Content-Type application/json
+API3-G-15,admin,200,schema_array_empty,reset,Empty orders after reset-db
+API3-G-16,admin,200,schema_array_nonempty,with_orders,Orders list with data after checkout
+API3-G-17,basic,401,error=Unauthorized,,Basic auth scheme rejected
+API3-G-18,admin,200,schema_user_name,,Admin sees user_name join field
+API3-G-19,admin,200,schema_status_enum,,Status enum values valid
+API3-G-20,admin,200,schema_total_numeric,,total_amount is numeric
+API3-G-21,admin,200,schema_array,,SEC-01 no crash on repeated calls
+API3-G-22,admin,200,schema_order_desc,,Response ordered by id DESC
+API3-G-23,admin,200,schema_array,,Double Authorization headers
+API3-G-24,admin,200,schema_array,,Large number of orders performance smoke
+API3-G-25,admin,200,schema_id_not_null,,Order object no unexpected null id
+API3-G-26,tampered,403,error=Forbidden,,Expired-like token format
+API3-G-27,admin,200,schema_array,,GET with query string ignored
+API3-G-28,admin,200,schema_object_type,,Array elements are objects not strings
+API3-G-29,user,200,schema_array,,IDOR user A cannot list all orders
+API3-G-30,admin,200,schema_array,,Admin token after fresh login
+API3-G-31,admin,200,schema_array,,Verify HTTP method GET only
+API3-G-32,admin,200,schema_address_nullable,,shipping_address can be null
+API3-G-33,malformed,403,error=Forbidden,,Token without Bearer prefix
+API3-G-34,admin,200,schema_array,,Multiple sequential admin calls consistent
+API3-G-35,admin,200,schema_user_name,,user_name string or null
+API3-G-36,admin,200,schema_array,,Case sensitivity Bearer header
+API3-G-37,admin,200,content-type=json,,Response body not HTML error page
+API3-G-38,admin,200,schema_created,,created_at string format
+API3-E-01,user,403,error,,EXTEND SEC-03 user token must 403
+API3-E-02,admin,200,schema_array,reset,EXTEND empty list after reset
+API3-E-03,admin,200,schema_all_fields,with_orders,EXTEND all required order fields present
+API3-E-04,none,401,error=Unauthorized,,EXTEND no auth header 401
+API3-E-05,admin,200,schema_array_min_length_1,with_orders,EXTEND orders after checkout nonempty
+API3-E-06,admin,200,content-type=json,,EXTEND Content-Type header check

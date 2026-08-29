@@ -1,0 +1,7 @@
+TC_ID,Type,Scenario,Method,URL,Auth,Expected_Status,Expected_Assert,Extra,Audit_Label,Audit_Reason
+API3-E-01,security,EXTEND SEC-03 user token must 403,GET,/api/admin/orders,user,403,error,,EXTEND,AI lists SEC-03 abstractly without executable negative TC
+API3-E-02,domain,EXTEND empty list after reset,GET,/api/admin/orders,admin,200,schema_array,reset,EXTEND,AI only tests happy path with existing orders
+API3-E-03,schema,EXTEND all required order fields present,GET,/api/admin/orders,admin,200,schema_all_fields,with_orders,EXTEND,AI schema checks often incomplete per field
+API3-E-04,security,EXTEND no auth header 401,GET,/api/admin/orders,none,401,error=Unauthorized,,EXTEND,Auth negative path deprioritized by AI
+API3-E-05,domain,EXTEND orders after checkout nonempty,GET,/api/admin/orders,admin,200,schema_array_min_length_1,with_orders,EXTEND,State-dependent list size not covered
+API3-E-06,schema,EXTEND Content-Type header check,GET,/api/admin/orders,admin,200,content-type=json,,EXTEND,Response header validation often omitted

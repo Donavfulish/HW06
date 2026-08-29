@@ -1,0 +1,45 @@
+tc_id,endpoint,from_status,to_status,role,body,expected_code,expected_assert,scenario
+API2-G-01,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message_or_error,pending -> confirmed (admin) valid
+API2-G-02,admin_status,pending,canceled,admin,"{""status"":""canceled""}",200,message_or_error,pending -> canceled (admin) valid
+API2-G-03,admin_status,confirmed,shipping,admin,"{""status"":""shipping""}",200,message_or_error,confirmed -> shipping (admin) valid
+API2-G-04,admin_status,confirmed,canceled,admin,"{""status"":""canceled""}",200,message_or_error,confirmed -> canceled (admin) valid
+API2-G-05,admin_status,shipping,delivered,admin,"{""status"":""delivered""}",200,message_or_error,shipping -> delivered (admin) valid
+API2-G-06,admin_status,pending,shipping,admin,"{""status"":""shipping""}",400,message_or_error,pending -> shipping (admin) invalid_skip
+API2-G-07,admin_status,pending,delivered,admin,"{""status"":""delivered""}",400,message_or_error,pending -> delivered (admin) invalid_skip
+API2-G-08,admin_status,confirmed,delivered,admin,"{""status"":""delivered""}",400,message_or_error,confirmed -> delivered (admin) invalid_skip
+API2-G-09,admin_status,confirmed,pending,admin,"{""status"":""pending""}",400,message_or_error,confirmed -> pending (admin) invalid_backward
+API2-G-10,admin_status,shipping,confirmed,admin,"{""status"":""confirmed""}",400,message_or_error,shipping -> confirmed (admin) invalid_backward
+API2-G-11,admin_status,shipping,pending,admin,"{""status"":""pending""}",400,message_or_error,shipping -> pending (admin) invalid_backward
+API2-G-12,admin_status,delivered,canceled,admin,"{""status"":""canceled""}",400,message_or_error,delivered -> canceled (admin) terminal
+API2-G-13,admin_status,delivered,confirmed,admin,"{""status"":""confirmed""}",400,message_or_error,delivered -> confirmed (admin) terminal
+API2-G-14,admin_status,canceled,confirmed,admin,"{""status"":""confirmed""}",400,message_or_error,canceled -> confirmed (admin) terminal
+API2-G-15,admin_status,canceled,delivered,admin,"{""status"":""delivered""}",400,bug_detect,canceled -> delivered (admin) BUG-B1
+API2-G-16,admin_status,shipping,canceled,admin,"{""status"":""canceled""}",400,message_or_error,shipping -> canceled (admin) invalid
+API2-G-17,admin_status,pending,processing,admin,"{""status"":""processing""}",400,error,Invalid status enum processing
+API2-G-18,admin_status,pending,,admin,{},400,error,Missing status in body
+API2-G-19,admin_status,pending,,admin,"{""status"":""""}",400,error,Empty status string
+API2-G-20,admin_status,pending,,admin,"{""status"":null}",400,error,Null status value
+API2-G-21,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",404,error=Order not found,Order ID not found 99999
+API2-G-22,admin_status,pending,confirmed,user,"{""status"":""confirmed""}",200,error,User token on admin status API SEC-03
+API2-G-23,admin_status,pending,confirmed,none,"{""status"":""confirmed""}",401,error=Unauthorized,No token admin status API
+API2-G-24,admin_status,pending,confirmed,malformed,"{""status"":""confirmed""}",403,error=Forbidden,Malformed token admin status
+API2-G-25,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message=Order status updated,Response message on valid transition
+API2-G-26,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,content-type=json,Response Content-Type json
+API2-G-27,user_cancel,pending,,user,{},200,message=Order canceled successfully,User cancel pending order
+API2-G-28,user_cancel,confirmed,,user,{},200,message=Order canceled successfully,User cancel confirmed order
+API2-G-29,user_cancel,shipping,,user,{},400,bug_detect,User cancel shipping order BUG-B3
+API2-G-30,user_cancel,delivered,,user,{},400,error,User cancel delivered order
+API2-G-31,user_cancel,canceled,,user,{},400,error,User cancel already canceled
+API2-G-32,user_cancel,pending,,other_user,{},404,error=Order not found,User cancel other user order IDOR
+API2-G-33,user_cancel,pending,,none,{},401,error=Unauthorized,No token user cancel
+API2-G-34,user_cancel,pending,,user,{},404,error=Order not found,Cancel order not found
+API2-G-35,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message=Order status updated,Additional edge case 35
+API2-G-36,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message=Order status updated,Additional edge case 36
+API2-G-37,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message=Order status updated,Additional edge case 37
+API2-G-38,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",200,message=Order status updated,Additional edge case 38
+API2-E-01,admin_status,canceled,delivered,admin,"{""status"":""delivered""}",400,bug_detect,EXTEND BUG-B1 canceled to delivered
+API2-E-02,user_cancel,shipping,,user,{},400,bug_detect,EXTEND BUG-B3 user cancel shipping
+API2-E-03,admin_status,pending,confirmed,user,"{""status"":""confirmed""}",403,error,EXTEND user token admin API
+API2-E-04,admin_status,shipping,canceled,admin,"{""status"":""canceled""}",400,error,EXTEND shipping to canceled admin
+API2-E-05,admin_status,pending,confirmed,admin,"{""status"":""confirmed""}",404,error,EXTEND numeric order id invalid
+API2-E-06,admin_status,pending,confirmed'; DROP TABLE orders;--,admin,"{""status"":""confirmed'; DROP TABLE orders;--""}",400,error,EXTEND SQLi in status field

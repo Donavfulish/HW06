@@ -1,0 +1,19 @@
+flowchart TD
+    A[API Spec markdown] --> B[Parse endpoints and params]
+    B --> C[AI: domain partitions per param]
+    B --> D[AI: security checklist SEC-01 to SEC-07]
+    B --> E[AI: schema from response examples]
+    C --> F[Human audit gate]
+    D --> F
+    E --> F
+    F --> G{Label VALID?}
+    G -->|INVALID/INCOMPLETE| H[Fix expected and asserts]
+    H --> F
+    G -->|VALID| I[Extend >=5 TC from known bugs]
+    I --> J[Export CSV test cases]
+    J --> K[Generate Postman collection JSON]
+    K --> L[Newman run with CSV data]
+    L --> M{Pass?}
+    M -->|Fail on bug TC| N[Bug report GitHub Issues]
+    M -->|Pass| O[HTML report archive]
+    N --> O

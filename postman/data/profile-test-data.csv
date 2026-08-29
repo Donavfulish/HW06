@@ -1,0 +1,45 @@
+tc_id,type,scenario,body,auth_mode,expected_status,expected_assert
+API1-G-01,domain,Happy path full profile update,"{""name"":""Nguyen Van A"",""phone"":""912345678"",""shipping_address"":""123 Le Loi Q1""}",valid,200,message=Profile updated
+API1-G-02,domain,Update name only,"{""name"":""Test User Updated""}",valid,200,message=Profile updated
+API1-G-03,domain,Update phone 9 digits valid regex,"{""phone"":""912345678""}",valid,200,message=Profile updated
+API1-G-04,domain,Update phone 10 digits valid regex,"{""phone"":""9123456789""}",valid,200,message=Profile updated
+API1-G-05,domain,Phone VN starts with 0,"{""phone"":""0912345678""}",valid,200,message=Profile updated
+API1-G-06,domain,Phone too short 8 chars,"{""phone"":""91234567""}",valid,200,error
+API1-G-07,domain,Phone too long 11 chars,"{""phone"":""91234567890""}",valid,200,error
+API1-G-08,domain,Phone contains letters,"{""phone"":""09abc12345""}",valid,200,error
+API1-G-09,domain,Empty phone string,"{""phone"":""""}",valid,200,error
+API1-G-10,domain,Empty name via API bypass,"{""name"":""""}",valid,400,error
+API1-G-11,domain,Whitespace-only name,"{""name"":""   ""}",valid,400,error
+API1-G-12,domain,Single char name boundary ON,"{""name"":""A""}",valid,200,message=Profile updated
+API1-G-13,domain,Normal shipping address,"{""shipping_address"":""123 Duong Le Loi Q1 TP.HCM""}",valid,200,message=Profile updated
+API1-G-14,domain,Empty shipping address,"{""shipping_address"":""""}",valid,200,message=Profile updated
+API1-G-15,domain,Very long shipping address 600 chars,"{""shipping_address"":""AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA""}",valid,200,message=Profile updated
+API1-G-16,domain,Phone first char ON min 1,"{""phone"":""1912345678""}",valid,200,message=Profile updated
+API1-G-17,domain,Phone first char IN mid 5,"{""phone"":""5912345678""}",valid,200,message=Profile updated
+API1-G-18,domain,Phone first char ON max 9,"{""phone"":""9912345678""}",valid,200,message=Profile updated
+API1-G-19,domain,Empty body object,{},valid,200,message=Profile updated
+API1-G-20,domain,Unicode name Vietnamese,"{""name"":""Nguyễn Văn An""}",valid,200,message=Profile updated
+API1-G-21,security,SEC-06 role=admin in body user JWT,"{""name"":""A"",""role"":""admin""}",valid,403,error
+API1-G-22,security,role=user explicit in body,"{""role"":""user""}",valid,200,message=Profile updated
+API1-G-23,security,SEC-02 missing Authorization header,"{""name"":""A""}",none,401,error=Unauthorized
+API1-G-24,security,SEC-02 malformed Bearer token,"{""name"":""A""}",malformed,403,error=Forbidden
+API1-G-25,security,SEC-02 tampered JWT signature,"{""name"":""A""}",tampered,403,error=Forbidden
+API1-G-26,security,SEC-01 SQLi in name field,"{""name"":""Robert'; DROP TABLE users;--""}",valid,200,message=Profile updated
+API1-G-27,security,SEC-01 XSS in shipping_address,"{""shipping_address"":""<script>alert(1)</script>""}",valid,200,message=Profile updated
+API1-G-28,schema,Response contains message key on 200,"{""name"":""Schema Test""}",valid,200,schema:message
+API1-G-29,schema,GET /api/users/me reflects update,"{""name"":""Reflect Test"",""phone"":""987654321""}",valid,200,verify_get
+API1-G-30,schema,Response Content-Type application/json,"{""name"":""CT Test""}",valid,200,content-type=json
+API1-G-31,domain,Phone OUT 13 chars,"{""phone"":""9123456789012""}",valid,200,error
+API1-G-32,domain,Name very long 1000 chars,"{""name"":""XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX""}",valid,200,message=Profile updated
+API1-G-33,domain,Null-like phone value,"{""phone"":null}",valid,200,message=Profile updated
+API1-G-34,security,Empty Bearer prefix only,"{""name"":""A""}",empty,401,error=Unauthorized
+API1-G-35,domain,Numeric name value type coercion,"{""name"":12345}",valid,200,message=Profile updated
+API1-G-36,domain,Extra unknown fields ignored,"{""name"":""A"",""extra_field"":""hack""}",valid,200,message=Profile updated
+API1-G-37,security,SEC-02 wrong auth scheme Basic,"{""name"":""A""}",basic,401,error=Unauthorized
+API1-G-38,domain,Phone missing from body,"{""name"":""No Phone""}",valid,200,message=Profile updated
+API1-E-01,security,EXTEND BUG-A2 role=admin expect 403,"{""name"":""Escalate"",""phone"":""912345678"",""role"":""admin""}",valid,403,error
+API1-E-02,domain,EXTEND BUG-A1 phone 0912345678 expect 200,"{""phone"":""0912345678""}",valid,200,message=Profile updated
+API1-E-03,domain,EXTEND BUG-A3 name empty expect 400,"{""name"":""""}",valid,400,error
+API1-E-04,security,EXTEND missing Authorization header,"{""name"":""NoAuth""}",none,401,error=Unauthorized
+API1-E-05,security,EXTEND SQLi name no crash sanitized,"{""name"":""1 OR 1=1; DROP TABLE users;""}",valid,200,message=Profile updated
+API1-E-06,security,EXTEND role=superadmin invalid enum,"{""role"":""superadmin""}",valid,403,error

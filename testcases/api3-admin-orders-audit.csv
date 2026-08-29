@@ -1,0 +1,39 @@
+TC_ID,Type,Scenario,Method,URL,Auth,Expected_Status,Expected_Assert,Extra,Audit_Label,Audit_Reason
+API3-G-01,domain,Admin token returns 200 array,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-02,security,User token SEC-03 should 403,GET,/api/admin/orders,user,200,schema_array,,INVALID,HW02 FR18-DT-17: backend lacks role check — user token returns 200 with full data
+API3-G-03,security,No token returns 401,GET,/api/admin/orders,none,401,error=Unauthorized,,VALID,Matches GET /api/admin/orders spec
+API3-G-04,security,Malformed JWT returns 403,GET,/api/admin/orders,malformed,403,error=Forbidden,,VALID,Matches GET /api/admin/orders spec
+API3-G-05,security,Tampered JWT returns 403,GET,/api/admin/orders,tampered,403,error=Forbidden,,VALID,Matches GET /api/admin/orders spec
+API3-G-06,security,Empty Bearer returns 401,GET,/api/admin/orders,empty,401,error=Unauthorized,,VALID,Matches GET /api/admin/orders spec
+API3-G-07,schema,Each order has id field,GET,/api/admin/orders,admin,200,schema_id,,VALID,Matches GET /api/admin/orders spec
+API3-G-08,schema,Each order has status field,GET,/api/admin/orders,admin,200,schema_status,,VALID,Matches GET /api/admin/orders spec
+API3-G-09,schema,Each order has total_amount field,GET,/api/admin/orders,admin,200,schema_total,,VALID,Matches GET /api/admin/orders spec
+API3-G-10,schema,Each order has shipping_address field,GET,/api/admin/orders,admin,200,schema_address,,VALID,Matches GET /api/admin/orders spec
+API3-G-11,schema,Each order has user_id field,GET,/api/admin/orders,admin,200,schema_user_id,,VALID,Matches GET /api/admin/orders spec
+API3-G-12,schema,Each order has created_at field,GET,/api/admin/orders,admin,200,schema_created,,VALID,Matches GET /api/admin/orders spec
+API3-G-13,schema,Response is JSON array type,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-14,schema,Content-Type application/json,GET,/api/admin/orders,admin,200,content-type=json,,VALID,Matches GET /api/admin/orders spec
+API3-G-15,domain,Empty orders after reset-db,GET,/api/admin/orders,admin,200,schema_array_empty,reset,VALID,Matches GET /api/admin/orders spec
+API3-G-16,domain,Orders list with data after checkout,GET,/api/admin/orders,admin,200,schema_array_nonempty,with_orders,VALID,Matches GET /api/admin/orders spec
+API3-G-17,security,Basic auth scheme rejected,GET,/api/admin/orders,basic,401,error=Unauthorized,,VALID,Matches GET /api/admin/orders spec
+API3-G-18,domain,Admin sees user_name join field,GET,/api/admin/orders,admin,200,schema_user_name,,VALID,Matches GET /api/admin/orders spec
+API3-G-19,schema,Status enum values valid,GET,/api/admin/orders,admin,200,schema_status_enum,,VALID,Matches GET /api/admin/orders spec
+API3-G-20,schema,total_amount is numeric,GET,/api/admin/orders,admin,200,schema_total_numeric,,VALID,Matches GET /api/admin/orders spec
+API3-G-21,security,SEC-01 no crash on repeated calls,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-22,domain,Response ordered by id DESC,GET,/api/admin/orders,admin,200,schema_order_desc,,VALID,Matches GET /api/admin/orders spec
+API3-G-23,security,Double Authorization headers,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-24,domain,Large number of orders performance smoke,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-25,schema,Order object no unexpected null id,GET,/api/admin/orders,admin,200,schema_id_not_null,,VALID,Matches GET /api/admin/orders spec
+API3-G-26,security,Expired-like token format,GET,/api/admin/orders,tampered,403,error=Forbidden,,VALID,Matches GET /api/admin/orders spec
+API3-G-27,domain,GET with query string ignored,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-28,schema,Array elements are objects not strings,GET,/api/admin/orders,admin,200,schema_object_type,,VALID,Matches GET /api/admin/orders spec
+API3-G-29,security,IDOR user A cannot list all orders,GET,/api/admin/orders,user,200,schema_array,,INVALID,HW02 FR18-DT-17: backend lacks role check — user token returns 200 with full data
+API3-G-30,domain,Admin token after fresh login,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-31,domain,Verify HTTP method GET only,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-32,schema,shipping_address can be null,GET,/api/admin/orders,admin,200,schema_address_nullable,,VALID,Matches GET /api/admin/orders spec
+API3-G-33,security,Token without Bearer prefix,GET,/api/admin/orders,malformed,403,error=Forbidden,,VALID,Matches GET /api/admin/orders spec
+API3-G-34,domain,Multiple sequential admin calls consistent,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-35,schema,user_name string or null,GET,/api/admin/orders,admin,200,schema_user_name,,VALID,Matches GET /api/admin/orders spec
+API3-G-36,security,Case sensitivity Bearer header,GET,/api/admin/orders,admin,200,schema_array,,VALID,Matches GET /api/admin/orders spec
+API3-G-37,domain,Response body not HTML error page,GET,/api/admin/orders,admin,200,content-type=json,,VALID,Matches GET /api/admin/orders spec
+API3-G-38,schema,created_at string format,GET,/api/admin/orders,admin,200,schema_created,,VALID,Matches GET /api/admin/orders spec

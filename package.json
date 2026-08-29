@@ -1,0 +1,14 @@
+{
+  "name": "hw06-api-tests",
+  "private": true,
+  "scripts": {
+    "generate": "node scripts/generate-all.js",
+    "test:api1": "newman run postman/collections/23127044_API1_Profile.postman_collection.json -e postman/environments/eshop-local.postman_environment.json -d postman/data/profile-test-data.csv -r cli,htmlextra --reporter-htmlextra-export results/api1/newman-report.html",
+    "test:api2": "newman run postman/collections/23127044_API2_OrderState.postman_collection.json -e postman/environments/eshop-local.postman_environment.json -d postman/data/order-state-test-data.csv -r cli,htmlextra --reporter-htmlextra-export results/api2/newman-report.html",
+    "test:api3": "newman run postman/collections/23127044_API3_AdminOrders.postman_collection.json -e postman/environments/eshop-local.postman_environment.json -d postman/data/admin-orders-test-data.csv -r cli,htmlextra --reporter-htmlextra-export results/api3/newman-report.html"
+  },
+  "devDependencies": {
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}

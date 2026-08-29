@@ -1,0 +1,7 @@
+TC_ID,Type,Scenario,Endpoint,Setup,Body,Auth,Expected_Status,Expected_Assert,Audit_Label,Audit_Reason
+API2-E-01,state,EXTEND BUG-B1 canceled to delivered,admin_status,canceled,"{""status"":""delivered""}",admin,400,bug_detect,EXTEND,AI lists terminal states but misses invalid re-open transition
+API2-E-02,state,EXTEND BUG-B3 user cancel shipping,user_cancel,shipping,{},user,400,bug_detect,EXTEND,AI conflates user vs admin cancel rules
+API2-E-03,security,EXTEND user token admin API,admin_status,pending,"{""status"":""confirmed""}",user,403,error,EXTEND,SEC-03 abstract without executable TC
+API2-E-04,state,EXTEND shipping to canceled admin,admin_status,shipping,"{""status"":""canceled""}",admin,400,error,EXTEND,Mid-flow cancel by admin not in happy-path diagram
+API2-E-05,domain,EXTEND numeric order id invalid,admin_status,pending,"{""status"":""confirmed""}",admin,404,error,EXTEND,Path param type edge often skipped
+API2-E-06,security,EXTEND SQLi in status field,admin_status,pending,"{""status"":""confirmed'; DROP TABLE orders;--""}",admin,400,error,EXTEND,Injection in enum field
