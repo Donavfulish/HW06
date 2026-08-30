@@ -48,14 +48,11 @@ push / workflow_dispatch
 ### 3.2 Fail demo (1 assertion / step cố ý fail)
 
 - Screenshot: `evidence/ci-fail-screenshot.png`
-- Link run: [TODO: dán URL Actions run đỏ sau bước fail demo]
-- Cách tạo: commit message chứa `demo failing` → step **Demo failing assertion** thoát code 1 → job đỏ. Sau đó commit khác (không có chữ đó) để pipeline xanh lại.
+- Link run: https://github.com/Donavfulish/HW06/actions/runs/33305984424
+- Commit: `7121b46` — `test: demo failing pipeline run`
+- Status: **Failure** (job `newman` đỏ, ~34s, artifact vẫn upload)
 
-**Cách tạo fail demo:**
-1. Push commit với message `test: demo failing pipeline run` (kèm sửa nhỏ workflow hoặc file bất kỳ nếu cần).
-2. Chụp Actions tab màu đỏ + copy URL.
-3. Push commit tiếp theo không chứa `demo failing` để repo trở lại xanh.
----
+> Step **Demo failing assertion** chạy vì commit message chứa `demo failing` → `exit 1` → job Failure (đúng yêu cầu đề: 1 sample run fail).---
 
 ## 4. Health check
 
