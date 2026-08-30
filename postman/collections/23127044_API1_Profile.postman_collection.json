@@ -26,18 +26,11 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const baseUrl = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
-                  "pm.sendRequest({",
-                  "  url: baseUrl + '/api/login',",
-                  "  method: 'POST',",
-                  "  header: { 'Content-Type': 'application/json', 'X-Student-Id': '23127044' },",
-                  "  body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('userEmail'), password: pm.environment.get('userPassword') }) }",
-                  "}, (err, res) => {",
-                  "  pm.test('Login status 200', () => pm.expect(res.code).to.eql(200));",
-                  "  const json = res.json();",
-                  "  pm.environment.set('userToken', json.token);",
-                  "  pm.collectionVariables.set('userToken', json.token);",
-                  "});"
+                  "pm.test('Login status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has token', () => pm.expect(json).to.have.property('token'));",
+                  "pm.environment.set('userToken', json.token);",
+                  "pm.collectionVariables.set('userToken', json.token);"
                 ]
               }
             }

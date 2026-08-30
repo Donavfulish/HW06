@@ -1,4 +1,18 @@
+# Dependencies & OS
 node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Internal agent / planning (NOT in HW06 submission PDF)
+IMPLEMENT_PROMPT.md
+PLAN_HW06.md
+
+# Temp / duplicate artifacts
+docs/diagram.png
+_hw06_pdf_extract.txt
+*.tmp
+.temp/
+scripts/commit-required.ps1
+scripts/export-pdfs.js
+scripts/generate-excalidraw.js

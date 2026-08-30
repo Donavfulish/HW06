@@ -362,18 +362,11 @@ function makeCollection(name, description, testScript, setupItems, testItem) {
 }
 
 const loginScript = (emailVar, passVar, tokenVar) => ([
-  `const baseUrl = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');`,
-  `pm.sendRequest({`,
-  `  url: baseUrl + '/api/login',`,
-  `  method: 'POST',`,
-  `  header: { 'Content-Type': 'application/json', 'X-Student-Id': '23127044' },`,
-  `  body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('${emailVar}'), password: pm.environment.get('${passVar}') }) }`,
-  `}, (err, res) => {`,
-  `  pm.test('Login status 200', () => pm.expect(res.code).to.eql(200));`,
-  `  const json = res.json();`,
-  `  pm.environment.set('${tokenVar}', json.token);`,
-  `  pm.collectionVariables.set('${tokenVar}', json.token);`,
-  `});`
+  `pm.test('Login status 200', () => pm.response.to.have.status(200));`,
+  `const json = pm.response.json();`,
+  `pm.test('Has token', () => pm.expect(json).to.have.property('token'));`,
+  `pm.environment.set('${tokenVar}', json.token);`,
+  `pm.collectionVariables.set('${tokenVar}', json.token);`
 ]);
 
 const profilePreRequest = [

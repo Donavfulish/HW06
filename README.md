@@ -78,9 +78,9 @@ HW06/
 | Step | Action |
 |------|--------|
 | 1 | Start SUT: `cd HW2/testing-seminar-eshop-sut/backend && npm run reset-db && npm start` |
-| 2 | Chụp Postman Console hiện `X-Student-Id: 23127044` → `evidence/x-student-id-pre-request-screenshot.png` |
+| 2 | ~~Chụp Postman Console `X-Student-Id`~~ ✅ `evidence/x-student-id-pre-request-screenshot.png` |
 | 3 | Chạy Newman: `.\run-all.ps1` hoặc lệnh trong `run-all.ps1` |
-| 4 | Vẽ diagram PNG tay từ `docs/test-generator-diagram.mmd` → `docs/test-generator-diagram.png` |
+| 4 | ~~Vẽ diagram PNG tay~~ ✅ `docs/test-generator-diagram.png` |
 | 5 | Export PDF: `main-report.pdf`, `ai-audit.pdf`, `ai-critique.pdf` |
 | 6 | Push GitHub public + screenshot CI pass + fail runs |
 | 7 | Tạo GitHub Issues bugs mới trên repo HW06 |

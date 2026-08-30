@@ -1,29 +1,29 @@
 # Evidence: X-Student-Id Pre-request Script
 
 **MSSV:** 23127044  
-**Requirement:** Header `X-Student-Id: 23127044` trên mọi request (anti-cheat)
+**Status:** ✅ DONE (2026-08-30)
 
-## Cách chụp screenshot
+## Screenshot file
 
-1. Mở Postman → import collection `23127044_API1_Profile` (hoặc bất kỳ collection HW06).
-2. Click collection → tab **Scripts** → **Pre-request**.
-3. Xác nhận script:
-   ```javascript
-   pm.request.headers.add({ key: 'X-Student-Id', value: '23127044' });
-   ```
-4. Mở **Postman Console** (View → Show Postman Console hoặc `Alt+Ctrl+C`).
-5. Gửi bất kỳ request trong collection (vd. Login User).
-6. Trong Console, mở request details → tab **Headers** → tìm `X-Student-Id: 23127044`.
-7. Chụp màn hình Console hiển thị header → lưu:
-   ```
-   evidence/x-student-id-pre-request-screenshot.png
-   ```
+`evidence/x-student-id-pre-request-screenshot.png`
 
-## Newman verification
+## What the screenshot proves
 
-Khi chạy Newman, hostname trong report phải là `localhost:3000` (khớp deployment local).
+From **Postman Console** on request `POST http://localhost:3000/api/login`:
 
-```powershell
-newman run postman/collections/23127044_API1_Profile.postman_collection.json `
-  -e postman/environments/eshop-local.postman_environment.json
+| Check | Value |
+|-------|--------|
+| Header present | `X-Student-Id: 23127044` |
+| Source | Collection-level Pre-request script |
+| Host | `localhost:3000` |
+
+## Collection script (verified)
+
+```javascript
+pm.request.headers.add({ key: 'X-Student-Id', value: '23127044' });
 ```
+
+## Note
+
+Console may show 401 on some login attempts (wrong body / lockout / double sendRequest).  
+Anti-cheat only requires the header `X-Student-Id: 23127044` visible in Console — that requirement is satisfied.

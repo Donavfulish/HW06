@@ -15,3 +15,4 @@ ci: add Newman GitHub Actions workflow
 docs: main report, AI audit, critique and bug reports
 feat: api-test-generator skill, diagram and pseudocode
 chore: finalize README and git commit log
+chore: keep only HW06 required deliverables (remove internal prompts; add PDFs, diagram PNG, X-Student-Id screenshot)
