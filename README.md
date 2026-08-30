@@ -34,7 +34,7 @@
 | Failed (assertions) | 8 | 13 | 7 | 28 |
 | Bugs found | 3 | 3 | 1 | 7 |
 
-> Chạy `.\run-all.ps1` để điền số liệu Newman thực tế vào bảng trên.
+> Số liệu từ Newman run local (`.\run-all.ps1`). Failures chủ yếu là TC phát hiện bug (expect 403/400, SUT trả 200).
 
 ---
 
@@ -87,7 +87,7 @@ HW06/
 | 8 | (Optional) Video demo Agent Skill → YouTube unlisted |
 | 9 | ZIP nộp Moodle |
 
-**Video demo (optional):** [TODO: YouTube unlisted link — demo skill generate TC cho 1 API]
+**Video demo (optional):** Bỏ qua — đề không bắt buộc video (encouraged only).
 
 ---
 

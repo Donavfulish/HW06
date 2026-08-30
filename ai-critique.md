@@ -15,4 +15,4 @@ Thứ ba, với state machine FR-10, AI mô tả đúng diagram hợp lệ nhưn
 
 ---
 
-*Export PDF: [TODO user export ai-critique.pdf]*
+*PDF: `ai-critique.pdf` (đã export).*

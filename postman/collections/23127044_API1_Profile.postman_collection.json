@@ -26,7 +26,7 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test('Login status 200', () => pm.response.to.have.status(201));",
+                  "pm.test('Login status 200', () => pm.response.to.have.status(200));",
                   "const json = pm.response.json();",
                   "pm.test('Has token', () => pm.expect(json).to.have.property('token'));",
                   "pm.environment.set('userToken', json.token);",

@@ -4,12 +4,15 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Internal agent / planning (NOT in HW06 submission PDF)
+# Internal agent / planning (NOT in HW06 submission)
 IMPLEMENT_PROMPT.md
 PLAN_HW06.md
 
-# Temp / duplicate artifacts
+# Temp / drafts / helpers
 docs/diagram.png
+docs/github-issues-draft.md
+docs/issue-*.md
+docs/ci-step-by-step.md
 _hw06_pdf_extract.txt
 *.tmp
 .temp/
