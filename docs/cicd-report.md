@@ -1,23 +1,26 @@
 # CI/CD Report — HW06 Newman Pipeline
 
 **MSSV:** 23127044  
-**Workflow:** `.github/workflows/api-tests.yml`
+**Repo:** https://github.com/Donavfulish/HW06  
+**Workflow:** `.github/workflows/api-tests.yml`  
+**Actions:** https://github.com/Donavfulish/HW06/actions
 
 ---
 
 ## 1. Pipeline mô tả
 
 ```
-push/PR → checkout → setup Node 20 → npm ci (Newman)
-       → install SUT backend → reset-db → start server (background)
-       → health check GET /api/products
-       → Newman API1 → reset-db → Newman API2 → reset-db → Newman API3
-       → upload HTML reports artifact
+push / workflow_dispatch
+  → checkout HW06
+  → setup Node 20 + npm ci (Newman)
+  → clone SUT https://github.com/Donavfulish/eshop-sut-hw02
+  → reset-db + start backend (port 3000)
+  → health check GET /api/products
+  → Newman API1 / API2 / API3 (continue-on-error for known bug TCs)
+  → upload HTML reports artifact
 ```
 
-**Trigger:** `push`, `pull_request` trên branch `main`/`master`.
-
-**Tools:** Newman 6.x, newman-reporter-htmlextra.
+**Trigger:** `push`, `pull_request`, `workflow_dispatch` trên `main`.
 
 ---
 
@@ -25,39 +28,36 @@ push/PR → checkout → setup Node 20 → npm ci (Newman)
 
 | Item | Local | CI |
 |------|-------|-----|
-| SUT path | `HW2/testing-seminar-eshop-sut/backend` | Clone hoặc sibling path |
-| Newman | `node_modules/.bin/newman` | `npm run test:api*` |
-| Reports | `results/api*/newman-report.html` | Artifact upload |
+| SUT | `HW2/testing-seminar-eshop-sut/backend` | Clone `Donavfulish/eshop-sut-hw02` vào `/tmp/eshop-sut` |
+| Newman | `npm run test:api*` | Same scripts in Actions |
+| Reports | `results/api*/newman-report.html` | Artifact `newman-reports` |
 
 ---
 
-## 3. Screenshots (TODO — user)
+## 3. Sample runs (điền sau khi chụp)
 
-### 3.1 All-pass run
+### 3.1 All-pass / pipeline xanh (setup + health OK)
 
-[TODO: Screenshot GitHub Actions green run — commit `test: all API tests passing`]
+- Screenshot: `evidence/ci-pass-screenshot.png`
+- Link run: [TODO: dán URL Actions run xanh]
 
-Link run: [TODO: GitHub Actions URL]
+> Job xanh khi checkout/install/SUT/health thành công. Các step Newman dùng `continue-on-error: true` vì một số TC cố ý phát hiện bug (expect 403/400, SUT trả 200).
 
-### 3.2 Fail demo run
+### 3.2 Fail demo (1 assertion cố ý sai)
 
-[TODO: Screenshot GitHub Actions red run — commit `test: demo failing pipeline run`]
-
-**Cách tạo fail demo:**
-1. Sửa 1 test script expect status 201 thay vì 200 (vd. API1 login test).
-2. Commit + push.
-3. Chụp Actions tab màu đỏ.
-4. Revert commit.
+- Screenshot: `evidence/ci-fail-screenshot.png`
+- Link run: [TODO: dán URL Actions run đỏ]
+- Cách tạo: đổi Login expect `200` → `201`, commit message `test: demo failing pipeline run`, push, chụp Actions đỏ, rồi revert.
 
 ---
 
 ## 4. Health check
 
-Workflow dùng `curl -f http://localhost:3000/api/products` trước Newman để đảm bảo backend sẵn sàng.
+`curl -sf http://localhost:3000/api/products` — phải 200 trước khi chạy Newman.
 
 ---
 
 ## 5. Notes
 
-- Một số TC **cố ý expect bug behavior** (403, 400) sẽ fail trên SUT hiện tại — workflow dùng `continue-on-error: true` để pipeline không block hoàn toàn.
-- Hostname trong Newman report phải khớp `localhost:3000` (anti-cheat).
+- Hostname trong Newman report: `localhost:3000` (anti-cheat OK).
+- Failures trên bug TC là evidence cho GitHub Issues #1–#3.

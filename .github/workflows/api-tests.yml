@@ -4,15 +4,18 @@ on:
   push:
     branches: [main, master]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   newman:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout HW06
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: npm
@@ -20,31 +23,33 @@ jobs:
       - name: Install Newman
         run: npm ci
 
-      - name: Install and reset SUT backend
-        working-directory: ../HW2/testing-seminar-eshop-sut/backend
+      - name: Clone SUT (EShop backend)
         run: |
+          git clone --depth 1 https://github.com/Donavfulish/eshop-sut-hw02.git /tmp/eshop-sut
+          cd /tmp/eshop-sut/backend
           npm ci
           npm run reset-db
-        continue-on-error: true
-
-      - name: Clone SUT if not present (standalone repo)
-        if: failure()
-        run: |
-          git clone --depth 1 https://github.com/Donavfulish/testing-seminar-eshop-sut.git /tmp/sut
-          cd /tmp/sut/backend && npm ci && npm run reset-db
 
       - name: Start backend
+        working-directory: /tmp/eshop-sut/backend
         run: |
-          if [ -d "../HW2/testing-seminar-eshop-sut/backend" ]; then
-            cd ../HW2/testing-seminar-eshop-sut/backend
-          else
-            cd /tmp/sut/backend
-          fi
           npm start &
-          sleep 5
+          echo $! > /tmp/eshop-backend.pid
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000/api/products >/dev/null; then
+              echo "Backend is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Backend failed to start"
+          exit 1
 
       - name: Health check
-        run: curl -f http://localhost:3000/api/products
+        run: curl -sf http://localhost:3000/api/products | head -c 200
+
+      - name: Prepare results folders
+        run: mkdir -p results/api1 results/api2 results/api3
 
       - name: Run API1 Profile tests
         run: npm run test:api1
@@ -67,3 +72,4 @@ jobs:
             results/api1/newman-report.html
             results/api2/newman-report.html
             results/api3/newman-report.html
+          if-no-files-found: warn
