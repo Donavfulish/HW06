@@ -39,16 +39,22 @@ push / workflow_dispatch
 ### 3.1 All-pass / pipeline xanh (setup + health OK)
 
 - Screenshot: `evidence/ci-pass-screenshot.png`
-- Link run: [TODO: dán URL Actions run xanh]
+- Link run: https://github.com/Donavfulish/HW06/actions/runs/33305798649
+- Commit: `133b666` — `ci: fix Actions workflow to clone eshop-sut-hw02 and start backend`
+- Status: **Success** (job `newman` ~36s, artifact `newman-reports` uploaded)
 
-> Job xanh khi checkout/install/SUT/health thành công. Các step Newman dùng `continue-on-error: true` vì một số TC cố ý phát hiện bug (expect 403/400, SUT trả 200).
+> Job xanh khi checkout/install/SUT/health thành công. Các step Newman dùng `continue-on-error: true` vì một số TC cố ý phát hiện bug (expect 403/400, SUT trả 200) — annotations có exit code 1 trên API steps nhưng job vẫn Success.
 
-### 3.2 Fail demo (1 assertion cố ý sai)
+### 3.2 Fail demo (1 assertion / step cố ý fail)
 
 - Screenshot: `evidence/ci-fail-screenshot.png`
-- Link run: [TODO: dán URL Actions run đỏ]
-- Cách tạo: đổi Login expect `200` → `201`, commit message `test: demo failing pipeline run`, push, chụp Actions đỏ, rồi revert.
+- Link run: [TODO: dán URL Actions run đỏ sau bước fail demo]
+- Cách tạo: commit message chứa `demo failing` → step **Demo failing assertion** thoát code 1 → job đỏ. Sau đó commit khác (không có chữ đó) để pipeline xanh lại.
 
+**Cách tạo fail demo:**
+1. Push commit với message `test: demo failing pipeline run` (kèm sửa nhỏ workflow hoặc file bất kỳ nếu cần).
+2. Chụp Actions tab màu đỏ + copy URL.
+3. Push commit tiếp theo không chứa `demo failing` để repo trở lại xanh.
 ---
 
 ## 4. Health check
