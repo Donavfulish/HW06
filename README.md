@@ -4,7 +4,7 @@
 **Assignment:** HW06 — API Testing with Postman + Newman  
 **Date:** 2026-08-29  
 **SUT:** `HW2/testing-seminar-eshop-sut/backend` (port 3000)  
-**GitHub Repo:** [TODO: https://github.com/Donavfulish/eshop-sut-hw06]
+**GitHub Repo:** https://github.com/Donavfulish/HW06
 
 ---
 
